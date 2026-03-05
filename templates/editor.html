@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Tab Editor</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+  <div class="container">
+    <nav class="top-nav">
+      <a href="/">Generate</a>
+      <a href="/editor" class="active">Create</a>
+    </nav>
+
+    <header>
+      <h1>Tab Editor</h1>
+      <p class="subtitle">Build chords with finger annotations and chain them into tabs.</p>
+    </header>
+
+    <div class="builder">
+      <div class="builder-row-top">
+        <div class="field">
+          <label for="chord-name">Chord Name</label>
+          <input type="text" id="chord-name" class="text-input" placeholder="e.g. D, Em, Cadd9" />
+        </div>
+      </div>
+
+      <div class="string-grid" id="string-grid"></div>
+
+      <div class="builder-actions">
+        <button id="add-btn" class="btn-primary" type="button">Add to Sequence</button>
+        <button id="update-btn" class="btn-primary hidden" type="button">Update Chord</button>
+        <button id="cancel-btn" class="btn-ghost hidden" type="button">Cancel</button>
+      </div>
+    </div>
+
+    <div class="sequence-section">
+      <div class="sequence-header">
+        <h3>Sequence</h3>
+        <div class="sequence-header-actions">
+          <button id="clear-btn" class="btn-ghost" type="button">Clear All</button>
+          <button id="copy-btn" class="btn-ghost" type="button">Copy as Text</button>
+        </div>
+      </div>
+      <div id="sequence-list" class="sequence-list">
+        <div class="empty-state">No chords yet. Build one above and add it.</div>
+      </div>
+    </div>
+
+    <div id="tab-output" class="tab-output hidden">
+      <h3>Tab</h3>
+      <div id="rendered-tab"></div>
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='editor.js') }}"></script>
+</body>
+</html>

@@ -4,8 +4,28 @@ document.addEventListener("DOMContentLoaded", () => {
   const loadingEl = document.getElementById("loading");
   const errorEl = document.getElementById("error");
   const outputEl = document.getElementById("output");
+  const loadFileInput = document.getElementById("load-file");
 
   btn.addEventListener("click", run);
+
+  loadFileInput.addEventListener("change", () => {
+    const file = loadFileInput.files[0];
+    if (!file) return;
+    const reader = new FileReader();
+    reader.onload = (e) => {
+      try {
+        const data = JSON.parse(e.target.result);
+        errorEl.classList.add("hidden");
+        render(data);
+      } catch {
+        errorEl.textContent = "Invalid file — could not parse tabs JSON.";
+        errorEl.classList.remove("hidden");
+      } finally {
+        loadFileInput.value = "";
+      }
+    };
+    reader.readAsText(file);
+  });
 
   async function run() {
     const transcript = transcriptInput.value.trim();
@@ -61,6 +81,8 @@ document.addEventListener("DOMContentLoaded", () => {
     let html = "";
 
     html += `<div class="song-header">`;
+    html += `<div class="song-header-top">`;
+    html += `<div>`;
     html += `<h2>${esc(data.title || "Untitled")}</h2>`;
     const metaParts = [];
     if (data.artist) metaParts.push(esc(data.artist));
@@ -69,6 +91,9 @@ document.addEventListener("DOMContentLoaded", () => {
     if (metaParts.length) {
       html += `<div class="meta">${metaParts.join(" &middot; ")}</div>`;
     }
+    html += `</div>`;
+    html += `<button class="btn-ghost" id="download-btn">Download tabs</button>`;
+    html += `</div>`;
     html += `</div>`;
 
     const arrangement = data.arrangement || [];
@@ -119,6 +144,17 @@ document.addEventListener("DOMContentLoaded", () => {
 
     outputEl.innerHTML = html;
     outputEl.classList.remove("hidden");
+
+    document.getElementById("download-btn").addEventListener("click", () => {
+      const filename = slugify(data.title || "tabs") + ".tabs.json";
+      const blob = new Blob([JSON.stringify(data, null, 2)], { type: "application/json" });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement("a");
+      a.href = url;
+      a.download = filename;
+      a.click();
+      URL.revokeObjectURL(url);
+    });
 
     document.getElementById("json-toggle-btn").addEventListener("click", () => {
       const raw = document.getElementById("json-raw");

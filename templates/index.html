@@ -11,6 +11,11 @@
 </head>
 <body>
   <div class="container">
+    <nav class="top-nav">
+      <a href="/" class="active">Generate</a>
+      <a href="/editor">Create</a>
+    </nav>
+
     <header>
       <h1>Tab Parser</h1>
       <p class="subtitle">Paste a guitar lesson transcript, get tabs.</p>
@@ -21,7 +26,14 @@
         <label for="transcript">Lesson Transcript</label>
         <textarea id="transcript" rows="8" placeholder="Paste your guitar lesson transcript here..."></textarea>
       </div>
-      <button id="generate-btn" type="button">Generate Tabs</button>
+      <div class="generate-row">
+        <button id="generate-btn" type="button">Generate Tabs</button>
+        <span class="or-divider">or</span>
+        <label class="btn-ghost upload-label" title="Load previously saved tabs">
+          Load saved tabs
+          <input id="load-file" type="file" accept=".json" style="display:none">
+        </label>
+      </div>
     </section>
 
     <div id="loading" class="loading hidden">
